@@ -1,13 +1,17 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
+
 import { fetchGeneration } from "../../data/generation";
 import { fetchPokemon } from "../../data/pokemon";
+import { useChannelStore } from "../../stores/channels";
+
 import Encounter from "./features/Encounter";
 
 type PokemonIndex = undefined | number;
 
 function World() {
 	const queryClient = useQueryClient();
+	const syncChannel = useChannelStore((state) => state.channels.pokemonSync);
 
 	const { data: generationData } = useQuery({
 		queryKey: ["generation"],
@@ -31,13 +35,19 @@ function World() {
 	const generateEncounter = async () => {
 		const idx = nextPokemon ?? getIndex();
 
+		syncChannel.postMessage({
+			id: idx,
+		});
+
 		setCurrentPokemon(idx);
 		setNextPokemon(undefined);
 	};
 
 	const handleOnHover = async () => {
 		const idx = getIndex();
+
 		setNextPokemon(idx);
+
 		await queryClient.prefetchQuery({
 			queryKey: ["pokemon", idx],
 			queryFn: () => fetchPokemon(idx),
