@@ -10,14 +10,15 @@ interface Pokemon {
 
 export function getPokemonSchema() {
 	return z.object({
-		id: z.number(),
+		name: z.string(),
 	});
 }
 
 export const pokemonQueryKey = "pokemon";
 
-export const fetchPokemon = async (id: number): Promise<Pokemon> => {
-	const { data } = await apiClient.get(`/pokemon/${id}`);
+export const fetchPokemon = async (name: string | undefined): Promise<Pokemon> => {
+
+	const { data } = await apiClient.get(`/pokemon/${name ?? 0}`);
 
 	return data;
 };

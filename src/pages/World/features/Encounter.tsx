@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 import {
 	fetchPokemon,
@@ -7,23 +7,25 @@ import {
 	pokemonQueryKey,
 } from "../../../data/pokemon";
 import { useChannelStore } from "../../../stores/channels";
+import { useGameStateStore } from "../../../stores/game_state";
 
 const schema = getPokemonSchema();
 
-function Encounter({ id }: { id: number }) {
-	const [currentId, setCurrentId] = useState(id);
+function Encounter() {
 	const syncChannel = useChannelStore((state) => state.channels.pokemonSync);
+	const activeEncounter = useGameStateStore((state) => state.activeEncounter);
+	const setEncounter = useGameStateStore((state) => state.setEncounter);
 
 	const { data } = useQuery({
-		queryKey: [pokemonQueryKey, currentId],
-		queryFn: () => fetchPokemon(currentId),
+		queryKey: [pokemonQueryKey, activeEncounter],
+		queryFn: () => fetchPokemon(activeEncounter),
 	});
 
 	const handleBroadcastMessage = (message: MessageEvent) => {
 		try {
-			const { id: broadcastId } = schema.parse(message.data);
+			const { name } = schema.parse(message.data);
 
-			setCurrentId(broadcastId);
+			setEncounter(name);
 		} catch (_) {
 			console.error("Invalid broadcasting data");
 		}

@@ -1,13 +1,12 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
 
 import { fetchGeneration } from "../../data/generation";
 import { fetchPokemon } from "../../data/pokemon";
 import { useChannelStore } from "../../stores/channels";
 
-import Encounter from "./features/Encounter";
+import { useGameStateStore } from "../../stores/game_state";
 
-type PokemonIndex = undefined | number;
+import Encounter from "./features/Encounter";
 
 function World() {
 	const queryClient = useQueryClient();
@@ -19,9 +18,9 @@ function World() {
 		select: (data) => data.pokemon_species,
 	});
 
-	const [currentPokemon, setCurrentPokemon] = useState<PokemonIndex>(undefined);
-	const [nextPokemon, setNextPokemon] = useState<PokemonIndex>(undefined);
-
+	const setEncounter = useGameStateStore((state) => state.setEncounter);
+	const nextEncounter = useGameStateStore((state) => state.nextEncounter);
+	const setNextEncounter = useGameStateStore((state) => state.setNextEncounter);
 	if (!generationData) {
 		return <></>;
 	}
@@ -33,24 +32,27 @@ function World() {
 	};
 
 	const generateEncounter = async () => {
-		const idx = nextPokemon ?? getIndex();
+		const idx = nextEncounter ?? getIndex();
+		const { name } = generationData[idx];
+
+		setEncounter(name);
+		setNextEncounter(undefined);
 
 		syncChannel.postMessage({
-			id: idx,
+			name,
 		});
-
-		setCurrentPokemon(idx);
-		setNextPokemon(undefined);
 	};
 
 	const handleOnHover = async () => {
 		const idx = getIndex();
 
-		setNextPokemon(idx);
+		const { name } = generationData[idx];
+
+		setNextEncounter(idx);
 
 		await queryClient.prefetchQuery({
-			queryKey: ["pokemon", idx],
-			queryFn: () => fetchPokemon(idx),
+			queryKey: ["pokemon", name],
+			queryFn: () => fetchPokemon(name),
 		});
 	};
 
@@ -58,7 +60,7 @@ function World() {
 		<>
 			<div className='container mx-auto flex flex-col items-center justify-between border-solid border-[1px] border-white p-4 rounded-lg max-w-[400px] min-h-[600px] bg-[#f2eecb]'>
 				<div className='h-[200px]'>
-					{!!currentPokemon && <Encounter id={currentPokemon} />}
+					<Encounter />
 				</div>
 				<button
 					className='btn btn-primary'
