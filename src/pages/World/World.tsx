@@ -1,29 +1,21 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
+import { useRouteLoaderData } from "react-router-dom";
 
-import { fetchGeneration } from "../../data/generation";
+import { GenerationPokemon } from "../../data/generation";
 import { fetchPokemon } from "../../data/pokemon";
 import { useChannelStore } from "../../stores/channels";
-
 import { useGameStateStore } from "../../stores/game_state";
 
 import Encounter from "./features/Encounter";
 
 function World() {
 	const queryClient = useQueryClient();
+	const generationData = useRouteLoaderData("root") as GenerationPokemon[];
+
 	const syncChannel = useChannelStore((state) => state.channels.pokemonSync);
-
-	const { data: generationData } = useQuery({
-		queryKey: ["generation"],
-		queryFn: () => fetchGeneration(),
-		select: (data) => data.pokemon_species,
-	});
-
 	const setEncounter = useGameStateStore((state) => state.setEncounter);
 	const nextEncounter = useGameStateStore((state) => state.nextEncounter);
 	const setNextEncounter = useGameStateStore((state) => state.setNextEncounter);
-	if (!generationData) {
-		return <></>;
-	}
 
 	const getIndex = () => {
 		const generationSize = generationData.length;

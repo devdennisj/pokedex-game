@@ -9,8 +9,8 @@ export interface Generation {
 	pokemon_species: GenerationPokemon[];
 }
 
-export const fetchGeneration = async (generation?: number): Promise<Generation> => {
-	const { data } = await apiClient.get(`/generation/${generation ?? 1}`);
+export const fetchGeneration = async (generation?: number): Promise<GenerationPokemon[]> => {
+	const { data } = await apiClient.get<Generation>(`/generation/${generation ?? 1}`);
 
-	return data;
+	return data.pokemon_species;
 };

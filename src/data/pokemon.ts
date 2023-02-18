@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { apiClient } from "./utils";
 
-interface Pokemon {
+export interface Pokemon {
 	name: string;
 	sprites: {
 		front_default: string;
@@ -17,8 +17,7 @@ export function getPokemonSchema() {
 export const pokemonQueryKey = "pokemon";
 
 export const fetchPokemon = async (name: string | undefined): Promise<Pokemon> => {
-
-	const { data } = await apiClient.get(`/pokemon/${name ?? 0}`);
+	const { data } = await apiClient.get(`/pokemon/${name ?? 1}`);
 
 	return data;
 };

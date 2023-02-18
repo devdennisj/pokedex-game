@@ -4,9 +4,10 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 import RootLayout from "./components/RootLayout";
+import { fetchGeneration } from "./data/generation";
 import Pokedex from "./pages/Pokedex";
 import World from "./pages/World";
 
@@ -25,20 +26,32 @@ const persister = createSyncStoragePersister({
 	storage: window.localStorage,
 });
 
+const router = createBrowserRouter([
+	{
+		id: "root",
+		path: "/",
+		element: <RootLayout />,
+		loader: () => fetchGeneration(),
+		children: [
+			{
+				index: true,
+				element: <World />,
+			},
+			{
+				path: "pokedex",
+				element: <Pokedex />,
+			},
+		],
+	},
+]);
+
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
 	<React.StrictMode>
 		<PersistQueryClientProvider
 			client={queryClient}
 			persistOptions={{ persister }}
 		>
-			<BrowserRouter>
-				<Routes>
-					<Route path="/" element={<RootLayout />}>
-						<Route index element={<World />} />
-						<Route path="pokedex" element={<Pokedex />} />
-					</Route>
-				</Routes>
-			</BrowserRouter>
+			<RouterProvider router={router} />
 			<ReactQueryDevtools initialIsOpen={false} />
 		</PersistQueryClientProvider>
 	</React.StrictMode>
