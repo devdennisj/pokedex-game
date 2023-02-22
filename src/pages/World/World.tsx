@@ -17,7 +17,7 @@ function World() {
 	const setEncounter = useGameStateStore((state) => state.setEncounter);
 	const nextEncounter = useGameStateStore((state) => state.nextEncounter);
 	const setNextEncounter = useGameStateStore((state) => state.setNextEncounter);
-	const addNewPokemon = usePokedexStore((state) => state.addNewPokemon);
+	const getPokemon = usePokedexStore((state) => state.getPokemon);
 
 	const getIndex = () => {
 		const generationSize = generationData.length;
@@ -42,7 +42,7 @@ function World() {
 
 		const { name } = generationData[idx];
 
-		addNewPokemon(name)
+		getPokemon(name)
 		setNextEncounter(idx);
 	};
 

@@ -1,22 +1,36 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import { getPokemonSchema } from '../../../data/pokemon';
 import { useChannelStore } from '../../../stores/channels';
 import { useGameStateStore } from '../../../stores/game_state';
-import { usePokedexStore } from '../../../stores/pokemon';
+import { FoundPokemon, usePokedexStore } from '../../../stores/pokemon';
 
 const schema = getPokemonSchema();
+const channelListenerName = "message"
 
 function Encounter() {
 	const syncChannel = useChannelStore((state) => state.channels.pokemonSync);
 	const activeEncounter = useGameStateStore((state) => state.activeEncounter);
 	const setEncounter = useGameStateStore((state) => state.setEncounter);
-	const collectedPokemon = usePokedexStore((state) => state.collected);
+	const getPokemon = usePokedexStore((state) => state.getPokemon);
+	const [activePokemon, setActivePokemon] = useState<undefined | FoundPokemon>(undefined)
 
-	const idx = collectedPokemon.findIndex(
-		({ pokemon }) => pokemon.name === activeEncounter
-	);
-	const activePokemon = collectedPokemon[idx];
+	useEffect(() => {
+		if (!activeEncounter) {
+			return
+		}
+
+		const getEncounter = async () => {
+			const encounteredPokemon = await getPokemon(activeEncounter)
+
+			setActivePokemon(encounteredPokemon)
+		}
+
+		getEncounter()
+
+	}, [activeEncounter])
+
+
 
 	const handleBroadcastMessage = (message: MessageEvent) => {
 		try {
@@ -29,10 +43,10 @@ function Encounter() {
 	};
 
 	useEffect(() => {
-		syncChannel.addEventListener('message', handleBroadcastMessage);
+		syncChannel.addEventListener(channelListenerName, handleBroadcastMessage);
 
 		return () => {
-			syncChannel.removeEventListener('message', handleBroadcastMessage);
+			syncChannel.removeEventListener(channelListenerName, handleBroadcastMessage);
 		};
 	}, []);
 

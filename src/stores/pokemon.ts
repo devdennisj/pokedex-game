@@ -2,7 +2,7 @@ import { create } from "zustand";
 
 import { Pokemon, fetchPokemon } from "../data/pokemon";
 
-interface FoundPokemon {
+export interface FoundPokemon {
 	pokemon: Pokemon,
 	metaData: {
 		added: Date
@@ -10,38 +10,56 @@ interface FoundPokemon {
 }
 
 interface PokedexStore {
+	// TODO recentlyAdded should be calculated when used instead of
+	// being kept in state
 	recentlyAdded: FoundPokemon[];
 	collected: FoundPokemon[]
-	addNewPokemon: (name: string) => void
+	getPokemon: (name: string) => Promise<FoundPokemon>
 }
 
-export const usePokedexStore = create<PokedexStore>((set) => ({
+export const usePokedexStore = create<PokedexStore>((set, get) => ({
 	recentlyAdded: [],
 	collected: [],
-	addNewPokemon: async (name) => {
-		const pokemon = await fetchPokemon(name)
+	getPokemon: async (name) => {
 
-		const foundPokemon: FoundPokemon = {
-			pokemon: {
-				name: pokemon.name,
-				sprites: {
-					front_default: pokemon.sprites.front_default
+		const { collected } = get();
+
+		const idx = collected.findIndex(
+			({ pokemon }) => pokemon.name === name
+		);
+
+		if (idx > -1) {
+			return collected[idx]
+		} else {
+			const pokemon = await fetchPokemon(name)
+
+			const foundPokemon: FoundPokemon = {
+				pokemon: {
+					name: pokemon.name,
+					sprites: {
+						front_default: pokemon.sprites.front_default
+					}
+				},
+				metaData: {
+					added: new Date(Date.now())
 				}
-			},
-			metaData: {
-				added: new Date(Date.now())
 			}
-		}
 
-		set((state) => ({
-			collected: [
-				...state.collected,
-				foundPokemon
-			],
-			recentlyAdded: [
-				...state.recentlyAdded,
-				foundPokemon
-			],
-		}));
+			set((state) => {
+
+				return {
+					collected: [
+						...state.collected,
+						foundPokemon
+					],
+					recentlyAdded: [
+						...state.recentlyAdded,
+						foundPokemon
+					],
+				}
+			});
+
+			return foundPokemon
+		}
 	}
 }));
