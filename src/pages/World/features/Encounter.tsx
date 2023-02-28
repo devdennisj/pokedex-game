@@ -57,7 +57,7 @@ function Encounter() {
 	const { pokemon } = activePokemon;
 
 	return (
-		<div>
+		<div className='mb-8'>
 			<div className='flex flex-col items-center'>
 				<img
 					src={pokemon.sprites.front_default}
@@ -66,7 +66,7 @@ function Encounter() {
 				/>
 			</div>
 			<article className='prose lg:prose-lg prose-headings:mb-0 prose-p:mt-4'>
-				<h1 className='capitalize text-[#454545]'>
+				<h1 className='capitalize'>
 					{pokemon.name}
 				</h1>
 			</article>

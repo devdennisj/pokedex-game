@@ -47,20 +47,24 @@ function World() {
 	};
 
 	return (
-		<>
-			<div className='container mx-auto flex flex-col items-center justify-between border-solid border-[1px] border-white p-4 rounded-lg max-w-[400px] min-h-[600px] bg-[#f2eecb]'>
-				<div className='h-[200px]'>
-					<Encounter />
+		<div className="container mx-auto flex flex-col items-center">
+			<Encounter />
+			<div className="flex pt-4">
+				<div className="grid place-items-center h-20">
+					<button
+						className='btn btn-primary'
+						onClick={generateEncounter}
+						onMouseEnter={handleOnHover}
+					>
+						Continue
+					</button>
 				</div>
-				<button
-					className='btn btn-primary'
-					onClick={generateEncounter}
-					onMouseEnter={handleOnHover}
-				>
-					Go into the wilds
-				</button>
+				<div className="divider divider-horizontal">OR</div>
+				<div className="grid place-items-center h-20">
+					<button disabled className="btn btn-outline">Go back</button>
+				</div>
 			</div>
-		</>
+		</div>
 	);
 }
 
