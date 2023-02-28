@@ -6,12 +6,12 @@ import { useGameStateStore } from "../../stores/game_state";
 import { usePokedexStore } from "../../stores/pokemon";
 
 import Encounter from "./features/Encounter";
-import { routes } from "../Router";
+import { routes } from "../config";
 
 type RouterData = GenerationPokemon[] | undefined
 
 function World() {
-	const generationData = useRouteLoaderData(routes.root) as RouterData ?? [];
+	const generationData = useRouteLoaderData(routes.game.id) as RouterData ?? [];
 
 	const syncChannel = useChannelStore((state) => state.channels.pokemonSync);
 	const setEncounter = useGameStateStore((state) => state.setEncounter);

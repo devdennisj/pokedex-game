@@ -8,7 +8,9 @@ import classNames from 'classnames';
 import { useRouteLoaderData } from 'react-router-dom';
 
 import { GenerationPokemon } from '../data/generation';
-import { routes } from './Router';
+
+import { routes } from './config';
+
 
 const columnHelper = createColumnHelper<GenerationPokemon>();
 
@@ -21,7 +23,7 @@ const columns = [
 type RouterData = GenerationPokemon[] | undefined
 
 function Pokedex() {
-	const generationData = useRouteLoaderData(routes.root) as RouterData ?? [];
+	const generationData = useRouteLoaderData(routes.game.id) as RouterData ?? [];
 
 	const table = useReactTable({
 		columns,

@@ -1,15 +1,22 @@
 import { createBrowserRouter } from "react-router-dom";
+
 import RootLayout from "../components/RootLayout";
 import { fetchGeneration } from "../data/generation";
+
 import World from "./World";
 import Pokedex from "./Pokedex";
+import StartPage from "./StartPage";
+import { routes } from "./config";
 
-export const routes = { root: "root" }
 
 export const router = createBrowserRouter([
   {
-    id: routes.root,
-    path: '/',
+    path: routes.root.path,
+    element: <StartPage />,
+  },
+  {
+    id: routes.game.id,
+    path: routes.game.path,
     element: <RootLayout />,
     loader: () => fetchGeneration(),
     children: [
@@ -18,7 +25,7 @@ export const router = createBrowserRouter([
         element: <World />,
       },
       {
-        path: 'pokedex',
+        path: routes.pokedex.path,
         element: <Pokedex />,
       },
     ],
