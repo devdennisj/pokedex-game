@@ -12,7 +12,10 @@ function RootLayout() {
               <Link to={routes.pokedex.path}>Pokedex</Link>
             </li>
             <li>
-              <a>Quests</a>
+              <Link to={routes.quests.path}>Quests</Link>
+            </li>
+            <li>
+              <Link to={`/${routes.game.path}`}>World</Link>
             </li>
           </ul>
         </div>

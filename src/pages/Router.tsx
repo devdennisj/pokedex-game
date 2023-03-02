@@ -1,13 +1,13 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter } from 'react-router-dom';
 
-import RootLayout from "../components/RootLayout";
-import { fetchGeneration } from "../data/generation";
+import RootLayout from '../components/RootLayout';
+import { fetchGeneration } from '../data/generation';
 
-import World from "./World";
-import Pokedex from "./Pokedex";
-import StartPage from "./StartPage";
-import { routes } from "./config";
-
+import World from './World';
+import Pokedex from './Pokedex';
+import StartPage from './StartPage';
+import { routes } from './config';
+import Quests from './Quests';
 
 export const router = createBrowserRouter([
   {
@@ -27,6 +27,10 @@ export const router = createBrowserRouter([
       {
         path: routes.pokedex.path,
         element: <Pokedex />,
+      },
+      {
+        path: routes.quests.path,
+        element: <Quests />,
       },
     ],
   },

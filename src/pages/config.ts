@@ -15,5 +15,9 @@ export const routes: Record<string, Route> = {
 	pokedex: {
 		id: "pokedex",
 		path: "pokedex"
+	},
+	quests: {
+		id: "quests",
+		path: "quests"
 	}
 }
