@@ -4,6 +4,7 @@ import { getPokemonSchema } from '../../../data/pokemon';
 import { useChannelStore } from '../../../stores/channels';
 import { useGameStateStore } from '../../../stores/game_state';
 import { FoundPokemon, usePokedexStore } from '../../../stores/pokemon';
+import Prose from '../../../components/Prose';
 
 const schema = getPokemonSchema();
 const channelListenerName = "message"
@@ -65,11 +66,11 @@ function Encounter() {
 					height={150}
 				/>
 			</div>
-			<article className='prose lg:prose-lg prose-headings:mb-0 prose-p:mt-4'>
+			<Prose className="lg:prose-lg prose-headings:mb-0 prose-p:mt-4">
 				<h1 className='capitalize'>
 					{pokemon.name}
 				</h1>
-			</article>
+			</Prose>
 		</div>
 	);
 }

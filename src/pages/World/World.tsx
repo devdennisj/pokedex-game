@@ -15,6 +15,7 @@ function World() {
 
 	const syncChannel = useChannelStore((state) => state.channels.pokemonSync);
 	const setEncounter = useGameStateStore((state) => state.setEncounter);
+	const activeEncounter = useGameStateStore((state) => state.activeEncounter);
 	const nextEncounter = useGameStateStore((state) => state.nextEncounter);
 	const setNextEncounter = useGameStateStore((state) => state.setNextEncounter);
 	const getPokemon = usePokedexStore((state) => state.getPokemon);
@@ -56,7 +57,7 @@ function World() {
 						onClick={generateEncounter}
 						onMouseEnter={handleOnHover}
 					>
-						Continue
+						{activeEncounter ? "Continue" : "Into the wilds"}
 					</button>
 				</div>
 				<div className="divider divider-horizontal">OR</div>
