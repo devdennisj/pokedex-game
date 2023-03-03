@@ -2,11 +2,13 @@ import { create } from "zustand";
 
 import { Pokemon, fetchPokemon } from "../data/pokemon";
 
+export interface MetaData {
+	added: Date
+}
+
 export interface FoundPokemon {
 	pokemon: Pokemon,
-	metaData: {
-		added: Date
-	}
+	metaData: MetaData
 }
 
 interface PokedexStore {
