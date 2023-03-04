@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import * as dayjs from 'dayjs';
+import toast from 'react-hot-toast';
 
 import { usePokedexStore } from '../stores/pokemon';
 import { Bell } from '../components/Icons';
@@ -12,7 +13,21 @@ function Notifications() {
   const collected = usePokedexStore((state) => state.collected);
 
   useEffect(() => {
+    const listLength = collected.length;
     if (collected.length === 0) return;
+
+    const latestPokemon = collected[listLength - 1];
+
+    toast.custom((t) => (
+      <div className='flex justify-end animate-enter'>
+        <div className='stat shadow-md bg-base-200 min-w-[250px]'>
+          <div className='stat-value capitalize'>
+            {latestPokemon.pokemon.name}
+          </div>
+          <div className='stat-desc'>has been added</div>
+        </div>
+      </div>
+    ));
 
     setHasNotifications(true);
   }, [collected]);
@@ -23,6 +38,7 @@ function Notifications() {
         <label tabIndex={0}>
           <button
             className='btn btn-ghost btn-circle'
+            onMouseEnter={() => toast.remove()}
             onClick={() => setHasNotifications(false)}
           >
             <div className='indicator'>
@@ -35,9 +51,9 @@ function Notifications() {
         </label>
         <ul
           tabIndex={0}
-          className='menu dropdown-content shadow-md bg-base-200 min-w-60 mt-1 mr-3'
+          className='menu dropdown-content shadow-md bg-base-200 min-w-[250px] mt-1 mr-3'
         >
-          {collected.slice(0, 5).map(({ pokemon, metaData }) => (
+          {collected.slice(-5).map(({ pokemon, metaData }) => (
             <li key={pokemon.name + metaData.added.toString()}>
               <div className='stat'>
                 <div className='stat-value capitalize'>{pokemon.name}</div>
