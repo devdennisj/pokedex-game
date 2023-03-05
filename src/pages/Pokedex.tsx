@@ -37,7 +37,7 @@ type RouterData = GenerationPokemon[] | undefined;
 
 function Pokedex() {
   const generationData =
-    (useRouteLoaderData(routes.game.id) as RouterData) ?? [];
+    (useRouteLoaderData(routes.game.id || '') as RouterData) ?? [];
   const collected = usePokedexStore((state) => state.collected);
 
   const combineData = () => {

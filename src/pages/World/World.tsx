@@ -12,7 +12,7 @@ type RouterData = GenerationPokemon[] | undefined;
 
 function World() {
   const generationData =
-    (useRouteLoaderData(routes.game.id) as RouterData) ?? [];
+    (useRouteLoaderData(routes.game.id ?? '') as RouterData) ?? [];
 
   const syncChannel = useChannelStore((state) => state.channels.pokemonSync);
   const setEncounter = useGameStateStore((state) => state.setEncounter);
