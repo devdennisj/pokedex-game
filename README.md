@@ -8,9 +8,9 @@ It does not currently have a backend and some features are greatly simplified.
 The app is deployed at https://pokedex-game-zeta.vercel.app/
 
 ## Tech stack
-TypeScript
-React
-Zustand
-Tailwind(+ DaisyUI)
-Zod
-Vite
+- TypeScript
+- React
+- Zustand
+- Tailwind(+ DaisyUI)
+- Zod
+- Vite
