@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 import toast from 'react-hot-toast';
 
 import { usePokedexStore } from '../stores/pokemon';
