@@ -1,11 +1,10 @@
 interface Route {
-	id: string;
+	id?: string;
 	path: string
 }
 
 export const routes: Record<string, Route> = {
 	root: {
-		id: "root",
 		path: "/"
 	},
 	game: {
@@ -13,11 +12,15 @@ export const routes: Record<string, Route> = {
 		path: "game"
 	},
 	pokedex: {
-		id: "pokedex",
 		path: "pokedex"
 	},
 	quests: {
-		id: "quests",
 		path: "quests"
+	},
+	town: {
+		path: "town"
+	},
+	npc: {
+		path: "npc/:id",
 	}
 }

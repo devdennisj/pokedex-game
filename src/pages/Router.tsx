@@ -1,6 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
 
-import RootLayout from '../components/RootLayout';
+import RootLayout from '../components/RootLayout/RootLayout';
 import { fetchGeneration } from '../data/generation';
 
 import World from './World';
@@ -8,6 +8,9 @@ import Pokedex from './Pokedex';
 import StartPage from './StartPage';
 import { routes } from './config';
 import Quests from './Quests';
+import Town from './Town';
+
+import NPC from '../features/NPC';
 
 export const router = createBrowserRouter([
   {
@@ -31,6 +34,14 @@ export const router = createBrowserRouter([
       {
         path: routes.quests.path,
         element: <Quests />,
+      },
+      {
+        path: routes.town.path,
+        element: <Town />,
+      },
+      {
+        path: routes.npc.path,
+        element: <NPC />,
       },
     ],
   },
