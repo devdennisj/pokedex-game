@@ -18,7 +18,7 @@ export const router = createBrowserRouter([
     element: <StartPage />,
   },
   {
-    id: routes.game.id,
+    id: routes.game.path,
     path: routes.game.path,
     element: <RootLayout />,
     loader: () => fetchGeneration(),

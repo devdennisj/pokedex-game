@@ -1,5 +1,4 @@
 interface Route {
-	id?: string;
 	path: string
 }
 
@@ -8,7 +7,6 @@ export const routes: Record<string, Route> = {
 		path: "/"
 	},
 	game: {
-		id: "game-root",
 		path: "game"
 	},
 	pokedex: {
