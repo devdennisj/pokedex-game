@@ -7,72 +7,68 @@ import { FoundPokemon, usePokedexStore } from '../../../stores/pokemon';
 import Prose from '../../../components/Prose';
 
 const schema = getPokemonSchema();
-const channelListenerName = "message"
+const channelListenerName = 'message';
 
 function Encounter() {
-	const syncChannel = useChannelStore((state) => state.channels.pokemonSync);
-	const activeEncounter = useGameStateStore((state) => state.activeEncounter);
-	const setEncounter = useGameStateStore((state) => state.setEncounter);
-	const getPokemon = usePokedexStore((state) => state.getPokemon);
-	const [activePokemon, setActivePokemon] = useState<undefined | FoundPokemon>(undefined)
+  const syncChannel = useChannelStore((state) => state.channels.pokemonSync);
+  const activeEncounter = useGameStateStore((state) => state.activeEncounter);
+  const setEncounter = useGameStateStore((state) => state.setEncounter);
+  const getPokemon = usePokedexStore((state) => state.getPokemon);
+  const [activePokemon, setActivePokemon] = useState<undefined | FoundPokemon>(
+    undefined
+  );
 
-	useEffect(() => {
-		if (!activeEncounter) {
-			return
-		}
+  useEffect(() => {
+    if (!activeEncounter) {
+      return;
+    }
 
-		const getEncounter = async () => {
-			const encounteredPokemon = await getPokemon(activeEncounter)
+    const getEncounter = async () => {
+      const encounteredPokemon = await getPokemon(activeEncounter);
 
-			setActivePokemon(encounteredPokemon)
-		}
+      setActivePokemon(encounteredPokemon);
+    };
 
-		getEncounter()
+    getEncounter();
+  }, [activeEncounter]);
 
-	}, [activeEncounter])
+  const handleBroadcastMessage = (message: MessageEvent) => {
+    try {
+      const { name } = schema.parse(message.data);
 
+      setEncounter(name);
+    } catch (_) {
+      console.error('Invalid broadcasting data');
+    }
+  };
 
+  useEffect(() => {
+    syncChannel.addEventListener(channelListenerName, handleBroadcastMessage);
 
-	const handleBroadcastMessage = (message: MessageEvent) => {
-		try {
-			const { name } = schema.parse(message.data);
+    return () => {
+      syncChannel.removeEventListener(
+        channelListenerName,
+        handleBroadcastMessage
+      );
+    };
+  }, []);
 
-			setEncounter(name);
-		} catch (_) {
-			console.error('Invalid broadcasting data');
-		}
-	};
+  if (!activePokemon) {
+    return <></>;
+  }
 
-	useEffect(() => {
-		syncChannel.addEventListener(channelListenerName, handleBroadcastMessage);
+  const { pokemon } = activePokemon;
 
-		return () => {
-			syncChannel.removeEventListener(channelListenerName, handleBroadcastMessage);
-		};
-	}, []);
-
-	if (!activePokemon) {
-		return <></>;
-	}
-
-	const { pokemon } = activePokemon;
-
-	return (
-		<div className='mb-8'>
-			<div className='flex flex-col items-center'>
-				<img
-					src={pokemon.sprites.front_default}
-					width={150}
-					height={150}
-				/>
-			</div>
-			<Prose className="lg:prose-lg prose-headings:mb-0 prose-p:mt-4">
-				<h1 className='capitalize'>
-					{pokemon.name}
-				</h1>
-			</Prose>
-		</div>
-	);
+  return (
+    <div className='mb-8'>
+      <div className='flex flex-col items-center'>
+        <img src={pokemon.sprites.front_default} width={150} height={150} />
+      </div>
+      <Prose className='lg:prose-lg prose-headings:mb-0 prose-p:mt-4'>
+        <h1 className='capitalize'>{pokemon.name}</h1>
+      </Prose>
+    </div>
+  );
 }
 
 export default Encounter;

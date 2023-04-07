@@ -50,7 +50,7 @@ function World() {
 
   return (
     <div className='container mx-auto flex flex-col items-center'>
-      <div className='min-h-[230px]'>
+      <div className='min-h-[230px] mt-32'>
         <Encounter />
       </div>
       <div className='flex pt-4'>
